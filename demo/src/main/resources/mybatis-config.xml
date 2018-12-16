@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC  
+    "-//mybatis.org//DTD Config 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 定义别名，可以让通用的配置文件，自动引用简单的别名类，而不是全路径类名 -->
+	<typeAliases>
+		<typeAlias alias="User" type="com.example.entity.User" />
+	</typeAliases>
+	<mappers>
+		<mapper resource="mapping/user.xml" />
+	</mappers>
+</configuration>

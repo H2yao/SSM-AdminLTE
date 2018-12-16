@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.dao.UserDao">
+	
+	<select id="getAll" resultType="User">
+		SELECT
+		U.USER_ID,
+		U.USER_NAME,
+		U.ACCOUNT,
+		U.`PASSWORD`,
+		U.USER_TYPE,
+		U.VALID_TIME,
+		U.ORG_ID,
+		U.ORG_NAME,
+		U.REMARK,
+		D.dic_name AS USER_STATUS
+		FROM
+		au_user AS U ,
+		dic_tree AS D
+		WHERE
+		U.USER_STATUS = D.DIC_ID
+	</select>
+	
+	<select id="queryAccount" resultType="User">
+		SELECT * FROM AU_USER WHERE ACCOUNT = #{queryAccount}
+	</select>
+	
+    <select id="getUserById" parameterType="int" resultType="User">
+		select * FROM AU_USER WHERE USER_ID=#{id}
+	</select>
+	
+	<delete id="deleteId" parameterType="int">
+		delete from AU_USER WHERE USER_ID=#{id}
+	</delete>
+	
+	<update id="updatePassWord"  parameterType="User">
+  		UPDATE AU_USER SET PASSWORD=#{password} WHERE USER_ID=#{user_id}
+ 	</update>
+	
+	<update id="updateUserInfo"  parameterType="User">
+  		UPDATE AU_USER SET 
+  		USER_NAME=#{user_name},
+  		VALID_TIME=#{valid_time},
+  		REMARK=#{remark} 
+  		WHERE USER_ID=#{user_id}
+ 	</update>
+	
+	<insert id="insertUserInfo" parameterType="User">
+		INSERT INTO AU_USER(USER_NAME,USER_STATUS,VALID_TIME,REMARK) VALUES(#{user_name},#{user_status},#{valid_time},#{remark})
+	</insert>	
+
+</mapper>

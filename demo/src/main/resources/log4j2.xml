@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="TRACE" monitorInterval="1800">
+    <Properties>
+	    <Property name="rawPattern">
+	        [H2yao example][%-5level][ %d{yyyy-MM-dd HH:mm:ss} ][%t] %logger{36}  %msg%n
+	    </Property>
+    </Properties>
+    
+    <Appenders>
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout pattern="${rawPattern}" />
+			<ThresholdFilter level="DEBUG" />
+		</Console>
+		<RollingRandomAccessFile name="running-log"
+		                         fileName="${web:rootDir}/log.log"
+		                         filePattern="${LOG_HOME}/$${date:yyyy-MM}/${FILE_NAME}-%d{yyyy-MM-dd}-%i.log.gz">
+			<PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss} %level [%thread][%file:%line] - %msg%n"/>
+		    <Policies>
+		        <TimeBasedTriggeringPolicy/>
+		        <SizeBasedTriggeringPolicy size="10 MB"/>
+		    </Policies>
+		    <DefaultRolloverStrategy max="20"/>
+		</RollingRandomAccessFile>
+    </Appenders>
+    
+    <Loggers>
+        <!-- 日志级别有：OFF、FATAL、ERROR、WARN、INFO、DEBUG、TRACE、ALL -->
+        
+        <!-- 同步日志 -->
+		<Logger name="com.example.dao" level="trace"> 
+			<AppenderRef ref="Console"/>
+		</Logger>
+        <Root level="ERROR">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="rollingFile" />
+        </Root>
+        
+        <!-- 异步日志 -->
+        <!-- <AsyncRoot level="ALL" includeLocation="true">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="rollingFile" />
+        </AsyncRoot> -->
+    </Loggers>
+    
+</Configuration>
