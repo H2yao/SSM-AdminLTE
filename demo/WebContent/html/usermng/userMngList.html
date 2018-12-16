@@ -1,0 +1,328 @@
+<script type="text/javascript" src="plugins/wangEditor.min.js"></script>
+<div class="layui-card">
+	<div class="layui-card-header">
+		<span>用户管理</span>
+    </div>
+    <!--新增-->
+	<div class="layui-card-body">
+		<div style="margin-bottom:10px;">
+			<a data-toggle="modal" id="btn-usermnglist-insert" onclick="usermnglistGeneralEdit()" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span> 新增</a>
+		</div>
+		<table class="layui-table" id="usermnglist-table" style="width: 100%">
+			<thead>
+				<tr>
+					<th data-data="user_id" data-title="Id" >ID</th>
+					<th data-data="user_name" data-title="用户名称">用户名称</th>
+					<th data-data="user_type" data-title="用户类型">用户类型</th>
+					<th data-data="org_name" data-title="所属部门">所属部门</th>
+					<th data-data="valid_time" data-title="有效开始时间">有效开始时间</th>
+					<th data-data="user_status" data-title="状态">状态</th>
+					
+					<th class="action_bar">操作</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+	</div>
+</div>
+
+<!-- 公用详情页-->
+<div id="usermnglist-detail-edit" style="display:none">
+	<form id="usermnglist-from" method="post" class="layui-form layui-form-pane" action="">
+		<div class="modal-body">
+			<div class="layui-card-header" style="text-align:right;padding-bottom:48px;">
+				<button type="submit" id="btn-usermnglist-determine" class="btn btn-default"><span class="glyphicon glyphicon-ok"></span> 确定</button>
+				<button type="button" id="btn-usermnglist-exprotword" class="btn btn-default"><span class="glyphicon glyphicon-print"></span> 导出文本</button>
+				<!-- hidden ID -->
+				<input id="usermnglist-input-id" name="usermnglist-input-Id" type="hidden" class="form-control">
+			</div>
+			<div class="layui-card-body">
+			
+				<div class="layui-form-item">
+					<div class="layui-inline">
+				    	<label class="layui-form-label ">用户名称</label>
+				    	<div class="layui-input-block">
+				        	<input type="text" id="usermnglist-input-name" name="usermnglist-input-name" autocomplete="off" class="layui-input">
+				    	</div>
+				    </div>
+					<div class="layui-inline">
+					    <label class="layui-form-label">开始日期</label>
+					    <div class="layui-input-block">
+					    	<input type="text" id="usermnglist-input-date" name="usermnglist-input-date" class="layui-input" placeholder="yyyy-MM-dd">
+					    </div>
+				    </div>
+				</div>
+				
+				<div class="layui-form-item">
+				    <label class="layui-form-label">长输入框</label>
+				    <div class="layui-input-block">
+				    	<input type="text" name="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+				    </div>
+			  	</div>
+			  	
+				<div class="layui-form-item">
+					<div class="form-group">
+						<div class="input-group">
+							<span class="input-group-addon" style="background-color:#FAFAFA;">备注</span>
+				    		<input type="text" id="usermnglist-ramark-title" name="usermnglist-ramark-title"autocomplete="off" placeholder="请输入标题" class="layui-input">
+							<div id="usermnglistMarketEditor" style="width:100%;height:336px;"></div>
+						</div>
+					</div>
+				</div>
+  
+			</div>
+		</div>
+	</form>
+</div>
+	
+<script type="text/javascript">
+
+laydate.render({
+	  elem: '#usermnglist-input-date'
+	});
+	
+//富文本编辑器
+var Editor = window.wangEditor;
+var usermnglistMarketEditor = new Editor('#usermnglistMarketEditor');
+usermnglistMarketEditor.customConfig.uploadImgServer = '/demo/userlist/upload'; //上传URL
+usermnglistMarketEditor.customConfig.uploadFileName = 'myFileName';
+usermnglistMarketEditor.customConfig.uploadImgHooks = {
+		// insertImg 是插入图片的函数
+        // editor 是编辑器对象，
+        // result 是服务器端返回的结果
+	    customInsert: function (insertImg, result, editor) {
+	                var url =result.data;
+	                insertImg(url); // result为JSON格式
+	            }
+	        }
+usermnglistMarketEditor.customConfig.menus =[
+    'head',  // 标题
+    'bold',  // 粗体
+    'fontSize',  // 字号
+    'fontName',  // 字体
+    'italic',  // 斜体
+    'underline',  // 下划线
+    'strikeThrough',  // 删除线
+    'foreColor',  // 文字颜色
+    'backColor',  // 背景颜色
+    'link',  // 插入链接
+    'list',  // 列表
+    'justify',  // 对齐方式
+    'quote',  // 引用
+    'emoticon',  // 表情
+    'image',  // 插入图片
+    'table',  // 表格
+    //'video',  // 插入视频
+    //'code',  // 插入代码
+    'undo',  // 撤销
+    'redo'  // 重复
+];
+usermnglistMarketEditor.customConfig.uploadImgShowBase64 = true; 
+usermnglistMarketEditor.customConfig.showLinkImg = false;
+usermnglistMarketEditor.create();
+
+//弹出详情页
+function usermnglistGeneralEdit(){
+	
+	layer.open({
+	  type: 1,
+	  title :'用户信息',
+	  area: ['1050px', '700px'],
+	  fixed: false, //不固定
+	  maxmin: true,
+	  content: $('#usermnglist-detail-edit')
+	});
+
+}
+
+$("#btn-usermnglist-exprotword").click(function(){
+	var remark =usermnglistMarketEditor.txt.html();
+	var remarkTitle =$("#usermnglist-ramark-title").val();
+	$.ajax({
+		url : '/demo/userlist/exprotWord',
+		type : 'post',
+		data : { 'remark': remark,'remarkTitle':remarkTitle},
+		success : function(data) {
+			if (data.info == 'success') {
+				layer.msg(data.content, {icon: 1});
+			}else{
+				layer.msg('导出失败', {icon: 2});
+			}
+		}
+	}); 
+});
+var LoadTable;
+$(document).ready(function() {
+	//构造表格
+	LoadTable=$('#usermnglist-table').DataTable({
+			"aoColumnDefs" : [//设置列的属性，此处设置第一列不排序
+                {"bSortable": false, "aTargets": [0]},{ "class": "tn", "targets": [ 0 ] },
+                {
+              	  //增加列
+                  "targets": -1,
+                  "class": "but_xq",
+                  "data": null,
+                  "bSortable": false,
+                  "defaultContent": "<div class='action_bar' >"
+                  				 +"<a id='btn-usermnglist-update' ><button class='layui-btn layui-btn-blue layui-btn-xs'>修改</button></a>"
+                  				 +"<a id='btn-usermnglist-delete' ><button class='layui-btn layui-btn-danger layui-btn-xs'>删除</button></a>"
+                  				 +"</div>"
+                }, 
+                {
+                	//隐藏列
+                    "targets": 0,
+                    "visible": false
+                } 
+			],
+		select : {
+			style : 'os',
+			selector : 'td:first-child'
+		},
+		"language" : {
+			"processing" : "处理中...",
+			"lengthMenu" : "显示 _MENU_ 项结果",
+			"zeroRecords" : "没有匹配结果",
+			"info" : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+			"infoEmpty" : "显示第 0 至 0 项结果，共 0 项",
+			"infoFiltered" : "(由 _MAX_ 项结果过滤)",
+			"infoPostFix" : "",
+			"search" : "搜索 ",
+			"searchPlaceholder" : " ",
+			"url" : "",
+			"emptyTable" : "表中数据为空",
+			"loadingRecords" : "载入中...",
+			"infoThousands" : ",",
+			"paginate" : {
+				"first" : "首页",
+				"previous" : "上页",
+				"next" : "下页",
+				"last" : "末页"
+			},
+			"aria" : {
+				paginate : {
+					first : '首页',
+					previous : '上页',
+					next : '下页',
+					last : '末页'
+				},
+				"sortAscending" : ": 以升序排列此列",
+				"sortDescending" : ": 以降序排列此列"
+			},
+			"decimal" : "-",
+			"thousands" : "."
+		},
+		//測試固定列
+		//scrollY : 600,
+		scrollX : true,
+		scrollCollapse : true,
+		paging : true,
+		ajax : "/demo/userlist/getAll"
+	});	
+	
+	//删除
+	$('#usermnglist-table tbody').on( 'click', 'a#btn-usermnglist-delete', function () {
+	    var id = $('#usermnglist-table').DataTable().row($(this).parents('tr')).data().user_id;
+	    layer.confirm('确定删除此条信息吗？', {
+	    	  btn: ['确定','取消'] //按钮
+	    	}, function(){
+	    		$.ajax({
+					url : '/demo/userlist/deleteId',
+					type : 'post',
+					data : {"id" : id},
+					success : function(data) {
+						if(data=='success'){
+							 layer.msg('删除成功', {icon: 1});
+							reload();
+						}else{
+							layer.msg('删除失败', {icon: 2});
+							}
+						}
+					});
+	    	}, function(){ });
+		}); 
+	
+	
+	//修改弹出
+	$('#usermnglist-table tbody').on( 'click', 'a#btn-usermnglist-update', function () {
+	    var id = $('#usermnglist-table').DataTable().row($(this).parents('tr')).data().user_id;
+	    $.ajax({
+			url : '/demo/userlist/getUserById',
+			type : 'post',
+			data : {"id" : id},
+			success : function(data) {
+				if(data.data != "error" && data.data != "null"){
+					$("#usermnglist-input-id").val(data.data[0].user_id);
+					$("#usermnglist-input-name").val(data.data[0].user_name);
+					$("#usermnglist-input-date").val(data.data[0].valid_time);
+					usermnglistMarketEditor.txt.html(data.data[0].remark);
+					//弹出层
+					usermnglistGeneralEdit();
+				}
+				else{
+					layer.msg("未找到该数据，请刷新后重试");
+					reload();
+				}
+				}
+			});
+		});
+	
+	
+	//验证
+	$("#usermnglist-from").validate({
+		debug: false, //调试模式取消submit的默认提交功能
+		focusInvalid: false, //当为false时，验证无效时，没有焦点响应
+		onkeyup: false,
+		submitHandler: function (form) {
+			var id = $("#usermnglist-input-id").val();
+			var name = $("#usermnglist-input-name").val();
+			var date = $("#usermnglist-input-date").val();
+			var remark =usermnglistMarketEditor.txt.html();
+			
+			
+			 if(id == "" || id == null || id.length == 0){
+				 //新增
+			     layer.msg('新增');
+			     $.ajax({
+						url : '/demo/userlist/addUser',
+						type : 'post',
+						data : { 'name' : name ,'remark': remark,'date': date},
+						success : function(data) {
+							if (data == "success") {
+								layer.closeAll();
+								layer.msg('新增成功', {icon: 1});
+							  	reload();
+							}else{
+								layer.closeAll();
+								layer.msg('新增失败', {icon: 2});
+							  	reload();
+							}
+						},
+					});
+			 }else{
+				 //修改
+				 var name = $("#usermnglist-input-name").val().trim();	
+					$.ajax({
+						url : "/demo/userlist/updateUser",
+						data : { 'id' : id, 'name' : name,'remark': remark,'date':date },
+						type : "POST",
+						success : function(data) {
+						 	if(data=="success") {
+						 		layer.closeAll();
+						 		layer.msg('修改成功', {icon: 1});
+							  	reload();
+							}
+						 	else{
+						 		layer.closeAll();
+						 		layer.msg('修改失败', {icon: 2});
+							  	reload();
+						 	}
+						},
+					})
+			 }
+		}
+	});
+	
+
+})
+
+</script>

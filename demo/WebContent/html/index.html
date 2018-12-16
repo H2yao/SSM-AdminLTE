@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <base href="../static/roncoo-adminlte/">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="icon" href="../../images/icon.ico">
+    
+    <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="dist/css/font-awesome.min.css">
+    <link rel="stylesheet" href="dist/css/ionicons.min.css">
+    <link rel="stylesheet" href="dist/css/AdminLTE.css">
+    <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="plugins/datepicker/datepicker3.css">
+    <link rel="stylesheet" href="plugins/iCheck/all.css">
+    <link rel="stylesheet" href="plugins/colorpicker/bootstrap-colorpicker.min.css">
+    <link rel="stylesheet" href="plugins/timepicker/bootstrap-timepicker.min.css">
+    <link rel="stylesheet" href="plugins/select2/select2.min.css">
+    <link rel="stylesheet" href="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <link rel="stylesheet" href="plugins/iCheck/flat/blue.css">
+    <link rel="stylesheet" href="plugins/fullcalendar/fullcalendar.min.css">
+    <link rel="stylesheet" href="plugins/fullcalendar/fullcalendar.print.css" media="print">
+    <link rel="stylesheet" href="plugins/ionslider/ion.rangeSlider.css">
+    <link rel="stylesheet" href="plugins/ionslider/ion.rangeSlider.skinNice.css">
+    <link rel="stylesheet" href="plugins/bootstrap-slider/slider.css">
+    <link rel="stylesheet" href="plugins/morris/morris.css">
+    <link rel="stylesheet" href="plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+    <link rel="stylesheet" href="plugins/layui/css/layui.css"  media="all">
+    <link rel="stylesheet" type="text/css" href="plugins/datatables/jquery.dataTables.css" />
+    <style type="text/css">
+        .input-group-addon1 {border-radius: 0; border-color: #d2d6de; background-color: #fff; padding: 9px 12px; font-size: 14px; font-weight: 400; line-height: 1; color: #555; text-align: center; border: 1px solid #ccc; white-space: nowrap; vertical-align: middle;float: left;width: 30%;}
+        .form-control1 {width: 70% !important;float: left;}
+        .detail-content{width:950px;margin-left:-200px;}
+        label.error {margin-left: 32%; color: red;}
+        .input-group1 {width: 100%;}
+        .action_bar{text-align:center;width:145px;}
+        .action_bar a{margin:0 5px;}
+    </style>
+    <script>
+        function onClickCheckbox(clickName, target) {
+            var status = false;
+            if (document.getElementById(clickName).checked) {
+                status = true;
+            }
+            var list = document.getElementsByName(target);
+            for (var i = 0; i < list.length; i++) {
+                list[i].checked = status;
+            }
+        }
+    
+        function iFrameHeight() {
+            var ifm = document.getElementById("content");
+            var subWeb = document.frames ? document.frames["content"].document
+                    : ifm.contentDocument;
+            if (ifm != null && subWeb != null) {
+                ifm.height = subWeb.body.scrollHeight;
+            }
+        }
+    </script>
+</head>
+<body class="sidebar-mini ajax-template skin-blue fixed ">
+    <div id="loading" class="loading-panel" style="display: none"></div>
+    <input id="pwdByOld" name="pwdByOld" type="hidden">
+    <div class="wrapper">
+        <!-- @header/  -->
+        <header class="main-header">
+            <nav class="navbar navbar-static-top">
+            <a href="../../html/index.html" class="logo"> <span
+                class=""> <b style="margin-left: -5px;">TITLE.</b>
+            </span>
+            </a>
+                <a href="javascript:void(0)" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">切换导航</span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown user user-menu">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"> 
+                                <img src="dist/img/user2.jpg" class="user-image" alt="User Image"> 
+                                <span id="adminAccount" class="hidden-xs"></span>
+                            </a>
+                            <!-- 下拉内容 -->
+                            <ul class="dropdown-menu">
+                                <li class="user-header"><img
+                                    src="dist/img/user2.jpg" class="img-circle"
+                                    alt="User Image">
+                                    <p id="adminType"></p></li>
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a data-toggle="modal" data-target="#modify-Pwd" id="validatePwd" class="btn btn-default btn-sm">密码修改</a>
+                                        <!-- id="validatePwd" -->
+                                    </div>
+                                    <div class="pull-right">
+                                        <button type="button" id="signOut" class="btn btn-default btn-sm">安全退出</button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        
+        <!-- @menu/系统菜单-->
+        <aside class="main-sidebar">
+            <section class="sidebar">
+                <ul class="sidebar-menu">
+                    <li class="header">导航菜单</li>
+                    
+                    <li class="treeview" style="color: #fff;">
+                        <a href="javascript:void(0)"> 
+                            <i class="fa fa-th"></i> 
+                            <span>管理</span> 
+                            <span class="pull-right-container"> 
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="javascript:void(0)"> 
+                                     <i class="fa fa-circle-o"></i>
+                                     <span>一级菜单</span>
+                                     <span class="pull-right-container">
+                                          <i class="fa fa-angle-left pull-right"></i>
+                                     </span>
+                                </a>
+                                 <ul class="treeview-menu">
+                                       <li><a target="navTab" href="#"><i class="fa fa-circle-o"></i>二级菜单</a></li>
+                                       <li><a target="navTab" href="#"><i class="fa fa-circle-o"></i>二级菜单</a></li>
+                                   </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)"> 
+                                     <i class="fa fa-circle-o"></i>
+                                     <span>一级菜单</span>
+                                     <span class="pull-right-container">
+                                          <i class="fa fa-angle-left pull-right"></i>
+                                     </span>
+                                </a>
+                                 <ul class="treeview-menu">
+                                       <li><a target="navTab" href="#"><i class="fa fa-circle-o"></i>二级菜单</a></li>
+                                       <li><a target="navTab" href="#"><i class="fa fa-circle-o"></i>二级菜单</a></li>
+                                   </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li id= "userMangement" class="treeview" style="color: #fff;">
+                        <a href="javascript:void(0)"> 
+                            <i class="fa fa-user"></i> 
+                            <span>用户管理</span> 
+                            <span class="pull-right-container"> 
+                            <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                             <li>
+                                <a target="navTab" href="../../html/usermng/userMngList.html">
+                                    <i class="fa fa-circle-o"></i>
+                                    <span>用户管理</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                </ul>
+            </section>
+        </aside>
+
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header-navtabs">
+                <div class="tabs-page">
+                    <ul class="tabs-list clearfix" id="navTabs">
+                        <li class="active"><span><i class="fa fa-home" style="margin-left:6px;"></i></span></li>
+                    </ul>
+                    <a href="javascript:void(0);" class="prev fa fa-step-backward"></a>
+                    <a href="javascript:void(0);" class="next fa fa-step-forward"></a>
+                </div>
+                <!--按钮-->
+                <div class="context-menu" id="contextMenu">
+                    <ul class="ct-nav">
+                        <li rel="reload">刷新页签</li>
+                        <li rel="closeCurrent">关闭当前页</li>
+                        <li rel="closeOther">关闭其他页</li>
+                        <li rel="closeAll">关闭全部页</li>
+                    </ul>
+                </div>
+            </section>
+            <section class="content" id="content">
+                <div class="tabs-panel">
+                    <h3> home page. </h3>
+                </div>
+            </section>
+        </div>
+
+        <!--@footer/主要是版权相关的信息内容-->
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 2.3.6
+            </div>
+           <span>Copyright &copy; 2018 <a href="https://github.com/h2yao" target="_blank"> H2yao <i class="glyphicon glyphicon-hand-left"></i> </a> All rights reserved .</span>
+        </footer>
+    </div>
+
+    <!-- 修改密码 dialog -->
+    <div class="modal fade" id="modify-Pwd" tabindex="-1" role="dialog"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="margin-top:100px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">
+                        <i class="fa fa-paperclip"></i>&nbsp;修改密码
+                    </h4>
+                </div>
+                <form id="editPwd" method="post" action="">
+                    <div class="modal-body">
+                    	<br>
+                        <div class="form-group form-group1">
+                            <div class="input-group input-group1">
+                                <span class="input-group-addon1"
+                                    style="background-color: #D2E4E8;">&nbsp;原&nbsp;密&nbsp;码:</span>
+                                <input id="OldPassword" name="OldPassword" ymm=""
+                                    type="password" class="form-control form-control1">
+                            </div>
+                        </div>
+                        <div class="form-group form-group1">
+                            <div class="input-group input-group1">
+                                <span class="input-group-addon1"
+                                    style="background-color: #D2E4E8;">&nbsp;新&nbsp;密&nbsp;码:</span>
+                                <input id="NewPassword" name="NewPassword" type="password"
+                                    class="form-control form-control1">
+                            </div>
+                        </div>
+                        <div class="form-group form-group1">
+                            <div class="input-group input-group1">
+                                <span class="input-group-addon1"
+                                    style="background-color: #D2E4E8;">确认密码:</span> <input
+                                    id="Confirm" name="Confirm" type="password"
+                                    class="form-control form-control1">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="modal-footer submit">
+                        <button type="submit" id="submitPwd_index" class="btn btn-success"
+                            data-dismiss="" style="float: left; display: inline;">&nbsp;保存</button>
+                    </div>
+                    <div class="modal-footer clearfix" style="margin-top: -65px;">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">&nbsp;取  消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
+     <script src="plugins/layer/layer.js"></script>
+    <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="plugins/fastclick/fastclick.js"></script>
+    <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <script src="dist/js/app.js"></script>
+    <script src="plugins/jQueryUI/jquery-ui.min.js"></script>
+    <script src="plugins/raphael/raphael.min.js"></script>
+    <script src="plugins/morris/morris.min.js"></script>
+    <script src="plugins/sparkline/jquery.sparkline.min.js"></script>
+    <script src="plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="plugins/knob/jquery.knob.js"></script>
+    <script src="plugins/moment/moment.min.js"></script>
+    <script src="plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+    <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <script src="plugins/chartjs/Chart.min.js"></script>
+    <script src="plugins/flot/jquery.flot.min.js"></script>
+    <script src="plugins/flot/jquery.flot.resize.min.js"></script>
+    <script src="plugins/flot/jquery.flot.pie.min.js"></script>
+    <script src="plugins/flot/jquery.flot.categories.min.js"></script>
+    <script src="plugins/iCheck/icheck.min.js"></script>
+    <script src="plugins/select2/select2.full.min.js"></script>
+    <script src="plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
+    <script src="plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script src="plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js"></script>
+    <script src="plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+    <script src="plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script src="plugins/ionslider/ion.rangeSlider.min.js"></script>
+    <script src="plugins/bootstrap-slider/bootstrap-slider.js"></script>
+    <script src="plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="plugins/jquery.form.js"></script>
+    <script src="plugins/laydate/laydate.js"></script>
+    <script src="plugins/datepicker1/js/SimpleCanleder.js"></script>
+    <script src="plugins/jquery.validate.min.js"></script>
+    <script src="plugins/jquery.validate.js"></script>
+    <script src="plugins/dp/DatePicker.js"></script>
+    <script src="plugins/dp/SimpleCanleder.js"></script>
+    <script type="text/javascript" src="plugins/sonic.js"></script>
+    <script src="plugins/xlsx.full.min.js"></script>
+    <script src="plugins/layui/layui.js"></script>
+   
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+            window.AdminType=0;
+            $.ajax({
+                url : '/demo/userlist/GetSession',
+                type : 'POST',
+                success : function(data) {
+                    //获取session 判断它是否已经登录 如果已经登录则直接跳转到index.html        
+                    if (data !== null && data !== '') {
+                        $('#adminAccount').html(data.user_name);
+                        $('#adminType').html(data.user_name+"<small>角色</small>");
+                        $('#OldPassword').val("");
+                        $('#NewPassword').val("");
+                        $('#Confirm').val("");
+                        if(data.type=="普通管理员"){
+                            $('#userMangement').hide();
+                        }
+                    }else{
+                    	location.href = '/demo/html/timeout.html';     
+                    }
+                }
+            })
+        }) 
+    
+    $.ajaxSetup({
+        type: 'POST',
+        complete: function(xhr,status) {
+            var sessionStatus = xhr.getResponseHeader('sessionstatus');
+            if(sessionStatus == 'timeout') {
+                var top = getTopWinow();
+                var yes = confirm('由于您长时间没有操作, 登录已超时, 请重新登录.');    
+                top.location.href = '/demo/html/login.html';            
+            }
+        }
+    });
+    
+    function getTopWinow(){
+        var p = window;
+        while(p != p.parent){
+            p = p.parent;
+        }
+        return p;
+    }
+
+     //修改密码前进行验证
+    $("#editPwd").validate({
+        debug : false, //调试模式取消submit的默认提交功能
+        focusInvalid : false, //当为false时，验证无效时，没有焦点响应
+        onkeyup : false,
+        submitHandler : function(form) { //表单提交句柄,为一回调函数，带一个参数：form                               
+            //修改密码
+            var oldpwd = $('#OldPassword').val();
+            var newpwd = $('#NewPassword').val();
+            $.ajax({
+                url : "/demo/userlist/EditPwd",
+                data : { 'oldpwd' : oldpwd, 'newpwd' : newpwd },
+                type : "POST",
+                success : function(data) {
+                    if (data == true) {
+                    	layer.msg('修改成功', {icon: 1});
+                        setTimeout(function(){window.location.href = "/demo/html/index.html"},700);
+                    }
+                }
+            })
+        },
+        rules : {
+            OldPassword : {
+                required : true,
+                remote: {
+                    cache: false, 
+                    url:'/demo/userlist/validateOldPwd',
+                    data:{oldPwd:function(){ 
+                          return $("#OldPassword").val(); 
+                    }},
+            }
+            },
+            NewPassword : {
+                required : true,
+                rangelength : [ 6, 15 ]
+            },
+            Confirm : {
+                equalTo : "#NewPassword"
+            }
+        },
+        messages : {
+            OldPassword : {
+                required : "不能为空",
+                remote : "原密码有误！"
+            },
+            NewPassword : {
+                required : "不能为空",
+                rangelength : $.format("密码最小长度:{0}, 最大长度:{1}。")
+            },
+            Confirm : {
+                equalTo : "两次密码输入不一致"
+            }
+        }
+    });
+
+    //安全退出
+    $("#signOut").on('click', function() {
+        $.ajax({
+            url : "/demo/userlist/SignOut",
+            type : "POST",
+            success : function(data) {
+                window.location.href = data;
+            },
+            error : function(XMLHttpRequest, textStatus, errorThrown) {
+                alert("error");
+            }
+        })
+    });
+    </script>
+
+    <script>
+    function reload() {
+        var _href = $("#navTabs li.active").attr("url");
+        var i = $("#navTabs li.active").index();
+        if (!_href) {
+            return false;
+        }
+        $("#loading").show();
+        $.ajax({
+            url : _href,
+            dataType : "html",
+            success : function(result) {
+                $("#loading").hide();
+                $("#content>.tabs-panel").eq(i).html(result)
+                showTab($("#navTabs li[url='" + _href + "']"));
+            },
+            error : function(err) {
+                $("#loading").hide();
+                console.log(err)
+            }
+        })
+    }
+
+    function showTab(that) {
+        var itemL = $("#navTabs>li").length;
+        var itemW = $("#navTabs>li").eq(0).width();
+        var boxW = $("#navTabs").parent().width();
+        that.addClass("active").siblings().removeClass("active");
+        $("#content>.tabs-panel").eq(that.index()).show().siblings().hide();
+        if (itemL * itemW > boxW - itemW) {
+            $("#navTabs").width(itemL * itemW + itemW).parent().addClass(
+                    "more");
+            var pl = that.prevAll().length;
+            if (pl * itemW > boxW - itemW) {
+                $("#navTabs").css("marginLeft",
+                        boxW - pl * itemW - itemW - 30);
+            } else {
+                $("#navTabs").css("marginLeft", 0);
+            }
+        } else {
+            $("#navTabs").width("100%").parent().removeClass("more");
+        }
+    }
+
+   function closeCurrent() {
+       var i = $("#navTabs li.active").index();
+       if (i == 0)
+           return false;
+       if ($("#navTabs>li").eq(i).hasClass("active")) {
+           $("#navTabs>li").eq(0).addClass("active");
+           $("#content>.tabs-panel").eq(0).show();
+       }
+
+       $("#navTabs>li").eq(i).remove();
+       $("#content>.tabs-panel").eq(i).remove();
+   }
+   
+   function closeDialog() {
+       $(".modal-backdrop").css("position","relative");
+        $(".modal-backdrop.in").css("opacity",null);
+        $(".modal-backdrop.fade").css("opacity","0");
+   }
+    </script>
+    
+    <script>
+//进度加载
+  var loaders = [ {
+
+   width : 100,
+   height : 100,
+
+   stepsPerFrame : 1,
+   trailLength : 1,
+   pointDistance : .05,
+
+   strokeColor : '#FF2E82',
+
+   fps : 20,
+
+   setup : function() {
+    this._.lineWidth = 4;
+   },
+   step : function(point, index) {
+
+    var cx = this.padding + 50, cy = this.padding + 50, _ = this._, angle = (Math.PI / 180)
+      * (point.progress * 360), innerRadius = index === 1 ? 10
+      : 25;
+
+    _.beginPath();
+    _.moveTo(point.x, point.y);
+    _.lineTo((Math.cos(angle) * innerRadius) + cx,
+      (Math.sin(angle) * innerRadius) + cy);
+    _.closePath();
+    _.stroke();
+
+   },
+   path : [ [ 'arc', 50, 50, 40, 0, 360 ] ]
+  }
+
+  ];
+  var container = document.getElementById('loading');
+  a = new Sonic(loaders[0]);
+  container.appendChild(a.canvas);
+  a.play();
+</script>
+</body>
+</html>
